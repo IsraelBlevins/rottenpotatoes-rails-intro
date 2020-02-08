@@ -14,32 +14,40 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.ratings_list
     
     if(params.has_key?(:rank))
+      sort = Movie.order(params[:rank])
       session[:rank] = params[:rank]
     elsif(session.has_key?(:rank))
+      sort = Movie.order(session[:rank])
       params[:rank] = session[:rank]
       redirect_to movies_path(params)
       return
+    else
+      sort = Movie.all
     end
     
     if(params.has_key?(:ratings))
+      @checked_ratings = params[:ratings].keys
       session[:ratings] = params[:ratings]
     elsif(session.has_key?(:ratings))
+      @checked_ratings = session[:ratings].keys
       params[:ratings] = session[:ratings]
       redirect_to movies_path(params)
       return
-    end
-    
-    if(session.has_key?(:ratings))
-      @checked_ratings = session[:ratings].keys
     else
       @checked_ratings = @all_ratings
     end
     
-    if(session.has_key?(:rank))
-      sort = Movie.order(session[:rank])
-    else
-      sort = Movie.all
-    end
+    # if(session.has_key?(:ratings))
+    #   @checked_ratings = session[:ratings].keys
+    # else
+    #   @checked_ratings = @all_ratings
+    # end
+    
+    # if(session.has_key?(:rank))
+    #   sort = Movie.order(session[:rank])
+    # else
+    #   sort = Movie.all
+    # end
     
     ratings_array = Movie.with_ratings(@checked_ratings)
     @movies = sort.where(rating: ratings_array)
