@@ -32,7 +32,7 @@ class MoviesController < ApplicationController
     if(session.has_key?(:ratings))
       @checked_ratings = session[:ratings]
     else
-      @checked_ratings = ratings_list
+      @checked_ratings = @all_ratings
     end
     
     if(session.has_key?(:rank))
