@@ -6,7 +6,7 @@ module MoviesHelper
   
   def active(link_id)
     if("#{params[:rank]}" == link_id)
-      return "bg-warning"
+      return "hilite"
     else
       return nil
     end

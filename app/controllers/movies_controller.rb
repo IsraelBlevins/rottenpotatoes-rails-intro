@@ -37,18 +37,6 @@ class MoviesController < ApplicationController
       @checked_ratings = @all_ratings
     end
     
-    # if(session.has_key?(:ratings))
-    #   @checked_ratings = session[:ratings].keys
-    # else
-    #   @checked_ratings = @all_ratings
-    # end
-    
-    # if(session.has_key?(:rank))
-    #   sort = Movie.order(session[:rank])
-    # else
-    #   sort = Movie.all
-    # end
-    
     ratings_array = Movie.with_ratings(@checked_ratings)
     @movies = sort.where(rating: ratings_array)
     
