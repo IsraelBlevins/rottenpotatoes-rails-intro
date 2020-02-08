@@ -30,7 +30,7 @@ class MoviesController < ApplicationController
     end
     
     if(session.has_key?(:ratings))
-      @checked_ratings = session[:ratings]
+      @checked_ratings = session[:ratings].keys
     else
       @checked_ratings = @all_ratings
     end
@@ -41,7 +41,7 @@ class MoviesController < ApplicationController
       sort = Movie.all
     end
     
-    ratings_array = Movie.with_ratings(@checked_ratings.keys)
+    ratings_array = Movie.with_ratings(@checked_ratings)
     @movies = sort.where(rating: ratings_array)
     
   end
