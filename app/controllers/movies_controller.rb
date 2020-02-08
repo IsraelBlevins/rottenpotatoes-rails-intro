@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-
+  
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
@@ -11,7 +11,28 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @all_ratings = Movie.ratings_list
+    
+    if(params.has_key?(:rank))
+      session[:rank] = params[:rank]
+    elsif(session.has_key?(:rank))
+      params[:rank] = session[:rank]
+      redirect_to movies_path(params)
+      return
+    end
+    
+    if(params.has_key?(:ratings))
+      session[:ratings] = params[:ratings]
+    elsif(session.has_key?(:ratings))
+      params[:ratings] = session[:ratings]
+      redirect_to movies_path(params)
+      return
+    end
+    
+    @checked_ratings = session[:ratings]
+    ratings_array = Movie.with_ratings(@checked_ratings.keys)
+    @movies = Movie.order(session[:rank]).where(rating: ratings_array)
+    
   end
 
   def new
